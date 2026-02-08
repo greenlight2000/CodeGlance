@@ -78,7 +78,6 @@ def make_RAG_details_output_prompt(s, data):
                     api_parameters = result.get("api_parameters", "")
                     api_returns = result.get("api_returns", "")
                     api_examples = result.get("api_examples", "")
-                    similarity = result.get("similarity", "")
                     
                     text = f"""\
 Query: {query}
@@ -88,7 +87,6 @@ Signature: {api_signature}
 Parameters: {api_parameters}
 Returns: {api_returns}
 Examples: {api_examples}
-similarity: {similarity}
 """
                     texts.append(text)
             rag_text =  "\n\n".join(texts)
@@ -161,13 +159,11 @@ def make_RAG_no_details_output_prompt(s, data):
             for match in matches:
                 query = match.get("query", "")
                 for result in match.get("results", []):
-                    similarity = result.get("similarity", "")
-                    
-                    if similarity == 1 or similarity == "1":
-                        api_path = result.get("API_path", "")
-                        api_doc_full = result.get("API_doc", "")
-                        api_name = result.get("API_name", "")
-                        api_signature = result.get("API_signature", "")
+
+                        api_path = result.get("api_path", "")
+                        api_doc_full = result.get("api_doc", "")
+                        api_name = result.get("api_name", "")
+                        api_signature = result.get("api_signature", "")
                         if isinstance(api_doc_full, str) and api_doc_full.strip():
                             text_clean = api_doc_full.replace("\n", " ").replace("\r", " ")
                             sentences = re.split(r'(?<=[。！？.!?])\s*', text_clean)
@@ -338,9 +334,7 @@ def make_RAG_MonkBeatEval_PanNumEval_output_prompt(s, data):
             for match in matches:
                 query = match.get("query", "")
                 for result in match.get("results", []):
-                    similarity = result.get("similarity", "")
-                    
-                    if similarity == 1 or similarity == "1":
+                
                         api_path = result.get("api_path", "")
                         api_description = result.get("api_description", "")
                         #api_name = result.get("API_name", "")
